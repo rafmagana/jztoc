@@ -1,0 +1,7 @@
+libraries
+libraries/*
+.project
+.DS_Store
+build.properties
+.tmp*
+.externalToolBuilders/
