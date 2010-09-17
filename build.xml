@@ -1,0 +1,50 @@
+<project name="jztoc" default="all" basedir=".">
+    
+    <property name="PREFIX" value="."/>
+    <property description="Folder for jztoc and min target" name="dist" value="${PREFIX}/build"/>
+    
+    <property name="JZ" value="${dist}/jztoc.js"/>
+    <property name="JZ_MIN" value="${dist}/jztoc.min.js"/>
+    <property name="LICENSE" value="MIT-LICENSE.header.txt"/>
+    
+    <target name="all" depends="jztoc, min"/>
+    
+    <target name="jztoc" description="Main jztoc build">
+        <echo message="Building ${JZ}"/>
+        <mkdir dir="${dist}"/>
+        <concat destfile="${JZ}">
+            <fileset file="src/list.js"/>
+            <fileset file="src/grid.js"/>
+        </concat>
+        <echo message="${JZ} built."/>
+    </target>
+    
+    <target name="min" depends="jztoc" description="minimize jztoc">
+        <echo message="Building ${JZ_MIN}"/>
+        
+        <apply executable="java" parallel="false" verbose="true" dest="${dist}">
+            <fileset dir="${dist}">
+                <include name="jztoc.js"/>
+            </fileset>
+            <arg line="-jar"/>
+            <arg path="libraries/compiler.jar"/>
+            
+            <arg value="--warning_level"/>
+            <arg value="QUIET"/>
+            <arg value="--js_output_file"/>
+            <targetfile/>
+            <arg value="--js"/>
+            <mapper type="glob" from="jztoc.js" to="tmpmin"/>
+        </apply>
+        
+        <concat destfile="${JZ_MIN}">
+            <fileset file="${LICENSE}"/>
+            <fileset file="${dist}/tmpmin"/>
+        </concat>
+        
+        <delete file="${dist}/tmpmin"/>
+        <echo message="${JZ_MIN} built."/>
+        
+    </target>
+    
+</project>
