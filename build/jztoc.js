@@ -7,8 +7,12 @@ $.ui.widget.subclass("ui.uicomponent", {
   _create: function(){
   },
   
-  getElement: function(selector){
+  getChild: function(selector){
     return $(selector, this.element);
+  },
+  
+  addChild: function(child){
+    return $(child).appendTo(this.element);
   },
   
   __currentState: null,
@@ -38,7 +42,19 @@ $.ui.widget.subclass("ui.uicomponent", {
   
   
 });
-$.widget("ui.list", {
+$.ui.uicomponent.subclass("ui.document", {
+  
+  pageTitle: function (title) {
+    $("title").text(title);
+  },
+  
+  //------------------------------------------------------------------------------
+  destroy: function(){
+    $.Widget.prototype.destroy.apply(this, arguments);
+  }
+  
+});
+$.ui.uicomponent.subclass("ui.list", {
   options: {
     dataProvider: [],
     itemRenderer: null,

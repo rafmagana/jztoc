@@ -15,6 +15,7 @@
         <mkdir dir="${dist}"/>
         <concat destfile="${JZ}">
             <fileset file="src/uicomponent.js"/>
+            <fileset file="src/document.js"/>
             <fileset file="src/list.js"/>
             <fileset file="src/grid.js"/>
         </concat>

@@ -7,8 +7,12 @@ $.ui.widget.subclass("ui.uicomponent", {
   _create: function(){
   },
   
-  getElement: function(selector){
+  getChild: function(selector){
     return $(selector, this.element);
+  },
+  
+  addChild: function(child){
+    return $(child).appendTo(this.element);
   },
   
   __currentState: null,

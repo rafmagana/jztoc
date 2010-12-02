@@ -5,7 +5,7 @@ table.grid th.header{ }
 table.grid tr{ height: 25px; }
 table.grid .sort-arrow { }
 table.grid .sort-arrow { }
-table.sortable { }
+table.grid .sortable { }
 table.grid td.column {}
 table.grid .loading {}
 
