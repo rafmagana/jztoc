@@ -1,0 +1,20 @@
+/*
+ * jztoc UI Components
+ *
+ * Copyright 2010, Acatl Pacheco
+ * Licensed under the MIT License.
+ *
+ */
+ 
+ 
+ table.grid { }
+table.grid thead{ }
+table.grid tbody{ }
+table.grid .header th{ }
+table.grid tr{ height: 25px; }
+table.grid .sort-arrow { }
+table.grid .sort-arrow { }
+table.sortable { }
+table.grid .column td {}
+table.grid .loading {}
+

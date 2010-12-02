@@ -5,18 +5,30 @@
     
     <property name="JZ" value="${dist}/jztoc.js"/>
     <property name="JZ_MIN" value="${dist}/jztoc.min.js"/>
+    <property name="CSS" value="${dist}/jztoc.css"/>
     <property name="LICENSE" value="MIT-LICENSE.header.txt"/>
     
-    <target name="all" depends="jztoc, min"/>
+    <target name="all" depends="jztoc, css, min"/>
     
     <target name="jztoc" description="Main jztoc build">
         <echo message="Building ${JZ}"/>
         <mkdir dir="${dist}"/>
         <concat destfile="${JZ}">
+            <fileset file="src/uicomponent.js"/>
             <fileset file="src/list.js"/>
             <fileset file="src/grid.js"/>
         </concat>
         <echo message="${JZ} built."/>
+    </target>
+    
+    <target name="css" description="css build">
+        <echo message="Building ${CSS}"/>
+        <mkdir dir="${dist}"/>
+        <concat destfile="${dist}/tmpcss">
+            <fileset file="src/css/grid.css"/>
+            <fileset file="src/css/list.css"/>
+        </concat>
+        <echo message="${CSS} built."/>
     </target>
     
     <target name="min" depends="jztoc" description="minimize jztoc">
@@ -42,7 +54,15 @@
             <fileset file="${dist}/tmpmin"/>
         </concat>
         
+        <concat destfile="${CSS}">
+            <fileset file="${LICENSE}"/>
+            <fileset file="${dist}/tmpcss"/>
+        </concat>
+        
+        <copy file="src/subclass.js" todir="${dist}"/>
+        
         <delete file="${dist}/tmpmin"/>
+        <delete file="${dist}/tmpcss"/>
         <echo message="${JZ_MIN} built."/>
         
     </target>

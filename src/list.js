@@ -1,4 +1,4 @@
-$.widget("ui.list", {
+$.ui.uicomponent.subclass("ui.list", {
   options: {
     dataProvider: [],
     itemRenderer: null,
@@ -22,14 +22,15 @@ $.widget("ui.list", {
   },
   
   _create: function(){
-  
     this.element.css(this.options.style);
-    
+  },
+  
+  _init: function () {
     if (this.options.dataProvider != null) {
       this.dataProvider(this.options.dataProvider);
     }
-    
   },
+  
   
   dataProvider: function(value){
     var rows = value;

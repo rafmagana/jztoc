@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <title>jztoc  - test harness</title>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
+        </script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js">
+        </script>
+        <link rel="stylesheet" type="text/css" href="../src/css/grid.css">
+        <script type="text/javascript" src="../src/subclass.js"></script>
+        <script type="text/javascript" src="../src/uicomponent.js"></script>
+        <script type="text/javascript" src="../src/grid.js"></script>
+        <script type="text/javascript">
+            $(function(){
+            
+              var options = {
+                columns: [{
+                  label: "Name",
+                  field: "name"
+                }, {
+                  label: "E-mail",
+                  width: 200,
+                  field: "email"
+                }, {
+                  label: "Phone",
+                  width: 200,
+                  field: "phone"
+                }],
+                dataProvider: [
+                  {name:"Polo", email:"polo@acronym.com", phone:"22-22-34"},
+                  {name:"Rafael", email:"rafa@acronym.com", phone:"22-34-56"},
+                  {name:"Edgar", email:"edgar@acronym.com", phone:"22-67-45"},
+                  {name:"Luis", email:"luis@acronym.com", phone:"22-95-45"}
+                ]
+              }
+              
+              $("#datagrid").grid(options);
+              
+            });
+        </script>
+    </head>
+    <body>
+        <div id="range">
+            Select a range.
+        </div>
+        <hr/>
+        <div id="datagrid" style="width:500px;">
+        </div>
+        <hr/>
+    </body>
+</html>
