@@ -3,23 +3,37 @@
     <property name="PREFIX" value="."/>
     <property description="Folder for jztoc and min target" name="dist" value="${PREFIX}/build"/>
     
-    <property name="JZ" value="${dist}/jztoc.js"/>
-    <property name="JZ_MIN" value="${dist}/jztoc.min.js"/>
+    <property name="JZ" value="${dist}/jztoc.core.js"/>
+    <property name="JZ_MIN" value="${dist}/jztoc.core.min.js"/>
+    
+    <property name="JZW" value="${dist}/jztoc.widgets.js"/>
+    <property name="JZW_MIN" value="${dist}/jztoc.widgets.min.js"/>
+    
     <property name="CSS" value="${dist}/jztoc.css"/>
+    
     <property name="LICENSE" value="MIT-LICENSE.header.txt"/>
     
-    <target name="all" depends="jztoc, css, min"/>
+    <target name="all" depends="jztoc, jztocw, css, min"/>
     
-    <target name="jztoc" description="Main jztoc build">
+    <target name="jztoc" description="Core jztoc build">
         <echo message="Building ${JZ}"/>
         <mkdir dir="${dist}"/>
         <concat destfile="${JZ}">
             <fileset file="src/uicomponent.js"/>
             <fileset file="src/document.js"/>
+            <fileset file="src/itemrenderer.js"/>
+        </concat>
+        <echo message="${JZ} built."/>
+    </target>
+    
+    <target name="jztocw" description="Widgets jztoc build">
+        <echo message="Building ${JZW}"/>
+        <mkdir dir="${dist}"/>
+        <concat destfile="${JZW}">
             <fileset file="src/list.js"/>
             <fileset file="src/grid.js"/>
         </concat>
-        <echo message="${JZ} built."/>
+        <echo message="${JZW} built."/>
     </target>
     
     <target name="css" description="css build">
@@ -37,7 +51,7 @@
         
         <apply executable="java" parallel="false" verbose="true" dest="${dist}">
             <fileset dir="${dist}">
-                <include name="jztoc.js"/>
+                <include name="jztoc.core.js"/>
             </fileset>
             <arg line="-jar"/>
             <arg path="libraries/compiler.jar"/>
@@ -47,12 +61,31 @@
             <arg value="--js_output_file"/>
             <targetfile/>
             <arg value="--js"/>
-            <mapper type="glob" from="jztoc.js" to="tmpmin"/>
+            <mapper type="glob" from="jztoc.core.js" to="tmpcoremin"/>
+        </apply>
+        
+        <apply executable="java" parallel="false" verbose="true" dest="${dist}">
+            <fileset dir="${dist}">
+                <include name="jztoc.widgets.js"/>
+            </fileset>
+            <arg line="-jar"/>
+            <arg path="libraries/compiler.jar"/>
+            
+            <arg value="--warning_level"/>
+            <arg value="QUIET"/>
+            <arg value="--js_output_file"/>
+            <targetfile/>
+            <arg value="--js"/>
+            <mapper type="glob" from="jztoc.widgets.js" to="tmpwidgtetsmin"/>
         </apply>
         
         <concat destfile="${JZ_MIN}">
             <fileset file="${LICENSE}"/>
-            <fileset file="${dist}/tmpmin"/>
+            <fileset file="${dist}/tmpcoremin"/>
+        </concat>
+        <concat destfile="${JZW_MIN}">
+            <fileset file="${LICENSE}"/>
+            <fileset file="${dist}/tmpwidgtetsmin"/>
         </concat>
         
         <concat destfile="${CSS}">
@@ -62,9 +95,11 @@
         
         <copy file="src/subclass.js" todir="${dist}"/>
         
-        <delete file="${dist}/tmpmin"/>
+        <delete file="${dist}/tmpcoremin"/>
+        <delete file="${dist}/tmpwidgtetsmin"/>
         <delete file="${dist}/tmpcss"/>
         <echo message="${JZ_MIN} built."/>
+        <echo message="${JZW_MIN} built."/>
         
     </target>
     
