@@ -5,12 +5,34 @@ $.ui.widget.subclass("ui.uicomponent", {
   },
   
   _create: function(){
+    if (this._helpers != null) {
+      for (var i in this._helpers) {
+        $.extend(this, this._helpers[i]);
+      }
+    }
+    
     var _states = {};
-    for ( var i in this._states) {
-      _states[this._states[i]] = this._states[i]; 
+    for (var i in this._states) {
+      _states[this._states[i]] = this._states[i];
     }
     
     this._states = _states;
+  },
+  
+  _renderHtmlTemplate: function(selector){
+    if ( this.options.htmlTemplate== null || this.options.htmlTemplate == "") {
+      return;
+    }
+    var object = this.element;
+    if (selector != null) {
+      if (typeof(selector) !== "string") {
+        object = selector;
+      }
+      else {
+        object = $(selector);
+      }
+    }
+    object.html(this.options.htmlTemplate);
   },
   
   getChild: function(selector){
@@ -35,16 +57,13 @@ $.ui.widget.subclass("ui.uicomponent", {
     }
   },
   
-  invalidateView: function () {
+  invalidateView: function(){
     this._updateView();
   },
-  
   
   //------------------------------------------------------------------------------
   destroy: function(){
     $.Widget.prototype.destroy.apply(this, arguments);
   }
-  
-  
   
 });
