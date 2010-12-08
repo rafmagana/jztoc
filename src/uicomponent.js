@@ -4,6 +4,13 @@ $.ui.widget.subclass("ui.uicomponent", {
     htmlTemplate: ""
   },
   
+  _helpers:null,
+  _states:null,
+  states:{
+    _enterState:null,
+    _exitState:null
+  },
+  
   _create: function(){
     if (this._helpers != null) {
       for (var i in this._helpers) {
@@ -45,7 +52,7 @@ $.ui.widget.subclass("ui.uicomponent", {
   
   __currentState: null,
   currentState: function(state, execute){
-    if (state == null) 
+    if (arguments.length == 0) 
       return this.__currentState;
     
     if (this.states != null) {
@@ -53,8 +60,19 @@ $.ui.widget.subclass("ui.uicomponent", {
       
       if (execute == false) 
         return;
+        
+      if ( this.states._enterState != null )
+        $.proxy(this.states._enterState, this)(state);
+      
       $.proxy(this.states[state], this)();
+      
+      if ( this.states._exitState != null )
+        $.proxy(this.states._exitState, this)(state);
     }
+  },
+  
+  _updateView:function () {
+    
   },
   
   invalidateView: function(){
