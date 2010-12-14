@@ -1,14 +1,16 @@
 $.ui.widget.subclass("ui.uicomponent", {
   options: {
     data: {},
+    getChildren: false,
+    renderHtmlTemplate: false,
     htmlTemplate: ""
   },
   
-  _helpers:null,
-  _states:null,
-  states:{
-    _enterState:null,
-    _exitState:null
+  _helpers: null,
+  _states: null,
+  states: {
+    _enterState: null,
+    _exitState: null
   },
   
   _create: function(){
@@ -24,10 +26,32 @@ $.ui.widget.subclass("ui.uicomponent", {
     }
     
     this._states = _states;
+    
+    if (this.options.renderHtmlTemplate == true) {
+      this._renderHtmlTemplate();
+    }
+    
+    if (this.options.getChildren == true) {
+      var collection = [];
+      $('[id]', this.element).each(function(){
+        if ($(this).attr('id') != null) {
+          collection.push({
+            id: $(this).attr('id'),
+            instance: $(this)
+          });
+        }
+      });
+      this.elements = {};
+      for (var index in collection) {
+        var o = collection[index];
+        this.elements[o.id] = o.instance; 
+      }
+    }
+    
   },
   
   _renderHtmlTemplate: function(selector){
-    if ( this.options.htmlTemplate== null || this.options.htmlTemplate == "") {
+    if (this.options.htmlTemplate == null || this.options.htmlTemplate == "") {
       return;
     }
     var object = this.element;
@@ -60,19 +84,19 @@ $.ui.widget.subclass("ui.uicomponent", {
       
       if (execute == false) 
         return;
-        
-      if ( this.states._enterState != null )
+      
+      if (this.states._enterState != null) 
         $.proxy(this.states._enterState, this)(state);
       
       $.proxy(this.states[state], this)();
       
-      if ( this.states._exitState != null )
+      if (this.states._exitState != null) 
         $.proxy(this.states._exitState, this)(state);
     }
   },
   
-  _updateView:function () {
-    
+  _updateView: function(){
+  
   },
   
   invalidateView: function(){
