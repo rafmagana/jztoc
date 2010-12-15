@@ -84,14 +84,24 @@ $.ui.widget.subclass("ui.uicomponent", {
       
       if (execute == false) 
         return;
+
+      if (this.states._exitState != null) 
+        $.proxy(this.states._exitState, this)(state);
+      else 
+        $(this.element).trigger("exitstate");
       
       if (this.states._enterState != null) 
         $.proxy(this.states._enterState, this)(state);
+      else 
+        $(this.element).trigger("enterstate");
       
       $.proxy(this.states[state], this)();
+
+      if (this.states._endState != null) 
+        $.proxy(this.states._endState, this)(state);
+      else
+        $(this.element).trigger("endstate");
       
-      if (this.states._exitState != null) 
-        $.proxy(this.states._exitState, this)(state);
     }
   },
   
