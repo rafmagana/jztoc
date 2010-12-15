@@ -49,6 +49,9 @@
                   age: "28"
                 }],
                 labelField: "name",
+                labelFunction: function (rowData) {
+                  return rowData.name + " is " + rowData.age;
+                },
                 style: style,
                 loading: {
                   label:"loading...",

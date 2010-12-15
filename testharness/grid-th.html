@@ -14,10 +14,14 @@
         <script type="text/javascript">
             $(function(){
             
+            
               var options = {
                 columns: [{
                   label: "Name",
-                  field: "name"
+                  field: "name",
+                  headerStyle: {
+                    color: "red"
+                  }
                 }, {
                   label: "E-mail",
                   width: 200,
@@ -25,7 +29,12 @@
                 }, {
                   label: "Phone",
                   width: 200,
-                  field: "phone"
+                  field: "phone",
+                  styleFunction: function (td, index, rowData, columnDefinition) {
+                    if ( rowData.phone == "22-95-45") {
+                      td.css("color", "blue");
+                    }
+                  }
                 }],
                 dataProvider: [
                   {name:"Polo", email:"polo@acronym.com", phone:"22-22-34"},
@@ -36,6 +45,7 @@
               }
               
               $("#datagrid").grid(options);
+              
               
             });
         </script>
