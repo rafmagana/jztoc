@@ -10,7 +10,7 @@ $.ui.document.subclass("ui.someview", {
   
   _init: function(){
     console.log("_init");
-    this.elements.name.val(this.options.data);
+    console.log(this.options);
   },
   
   //------------------------------------------------------------------------------
