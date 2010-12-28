@@ -19,9 +19,11 @@
         <echo message="Building ${JZ}"/>
         <mkdir dir="${dist}"/>
         <concat destfile="${JZ}">
-            <fileset file="src/uicomponent.js"/>
-            <fileset file="src/document.js"/>
-            <fileset file="src/itemrenderer.js"/>
+            <fileset file="src/core/events.js"/>
+            <fileset file="src/core/uicomponent.js"/>
+            <fileset file="src/core/document.js"/>
+            <fileset file="src/core/itemrenderer.js"/>
+            <fileset file="src/plugins/addeventlistener.js"/>
         </concat>
         <echo message="${JZ} built."/>
     </target>
@@ -30,8 +32,8 @@
         <echo message="Building ${JZW}"/>
         <mkdir dir="${dist}"/>
         <concat destfile="${JZW}">
-            <fileset file="src/list.js"/>
-            <fileset file="src/grid.js"/>
+            <fileset file="src/widgets/list.js"/>
+            <fileset file="src/widgets/grid.js"/>
         </concat>
         <echo message="${JZW} built."/>
     </target>

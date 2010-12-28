@@ -1,13 +1,59 @@
+var FocusEvents = {
+  FOCUSIN: "focusin",
+  FOCUSOUT: "focusout"
+};
+
+var MouseEvents = {
+  CLICK: "click",
+  DBCLICK: "dbclick",
+  HOVER: "hover",
+  MOUSEDOWN: "mousedown",
+  MOUSEENTER: "mouseenter",
+  MOUSELEAVE: "mouseleave",
+  MOUSEMOVE: "mousemove",
+  MOUSEOUT: "mouseout",
+  MOUSEOVER: "mouseover",
+  MOUSEUP: "mouseup"
+};
+$.extend(MouseEvents, FocusEvents);
+
+var KeyboardEvents = {
+  KEYDOWN: "keydown",
+  KEYPRESS: "keypress",
+  KEYUP: "keyup"
+};
+$.extend(KeyboardEvents, FocusEvents);
+
+var FormEvents = {
+  BLUR: "blur",
+  CHANGE: "change",
+  FOCUS: "focus",
+  SELECT: "select",
+  SUBMIT: "submit"
+};
+
+var StateEvents = {
+  EXITSTATE: "exitstate",
+  ENTERSTATE: "enterstate",
+  ENDSTATE: "endstate"
+};
+
+var UIComponentEvents = {
+  STARTRENDERING: "startrendering",
+  FINISHRENDERING: "finishrendering"
+};
+
 $.ui.widget.subclass("ui.uicomponent", {
   options: {
     data: {},
-    getChildren: false,
+    getChildren: true,
     renderHtmlTemplate: false,
     htmlTemplate: ""
   },
   
   _helpers: null,
   _states: null,
+  
   states: {
     _enterState: null,
     _exitState: null
@@ -32,28 +78,34 @@ $.ui.widget.subclass("ui.uicomponent", {
     }
     
     if (this.options.getChildren == true) {
-      var collection = [];
-      $('[id]', this.element).each(function(){
-        if ($(this).attr('id') != null) {
-          collection.push({
-            id: $(this).attr('id'),
-            instance: $(this)
-          });
-        }
-      });
-      this.elements = {};
-      for (var index in collection) {
-        var o = collection[index];
-        this.elements[o.id] = o.instance; 
-      }
+      this._getChildren();
     }
-    
+  },
+  
+  _getChildren: function(){
+    var collection = [];
+    $('[id]', this.element).each(function(){
+      if ($(this).attr('id') != null) {
+        collection.push({
+          id: $(this).attr('id'),
+          instance: $(this)
+        });
+      }
+    });
+    this.elements = {};
+    for (var index in collection) {
+      var o = collection[index];
+      this.elements[o.id] = o.instance;
+    }
   },
   
   _renderHtmlTemplate: function(selector){
     if (this.options.htmlTemplate == null || this.options.htmlTemplate == "") {
       return;
     }
+    
+    $(object).trigger(UIComponentEvents.STARTRENDERING);
+    
     var object = this.element;
     if (selector != null) {
       if (typeof(selector) !== "string") {
@@ -64,6 +116,8 @@ $.ui.widget.subclass("ui.uicomponent", {
       }
     }
     object.html(this.options.htmlTemplate);
+    
+    $(object).trigger(UIComponentEvents.FINISHRENDERING);
   },
   
   getChild: function(selector){
@@ -84,29 +138,29 @@ $.ui.widget.subclass("ui.uicomponent", {
       
       if (execute == false) 
         return;
-
+      
       if (this.states._exitState != null) 
         $.proxy(this.states._exitState, this)(state);
       else 
-        $(this.element).trigger("exitstate");
+        $(this.element).trigger(StateEvents.EXITSTATE);
       
       if (this.states._enterState != null) 
         $.proxy(this.states._enterState, this)(state);
       else 
-        $(this.element).trigger("enterstate");
+        $(this.element).trigger(StateEvents.ENTERSTATE);
       
       $.proxy(this.states[state], this)();
-
+      
       if (this.states._endState != null) 
         $.proxy(this.states._endState, this)(state);
-      else
-        $(this.element).trigger("endstate");
+      else 
+        $(this.element).trigger(StateEvents.ENDSTATE);
       
     }
   },
   
   _updateView: function(){
-  
+    // empty
   },
   
   invalidateView: function(){
@@ -149,3 +203,18 @@ $.ui.uicomponent.subclass("ui.itemrenderer", {
   }
   
 });
+(function($){
+  $.fn.addEventListener = function(eventType, handler, scope, eventData){
+    if (arguments.length < 2) 
+      return;
+      
+    var fn = handler;
+    if (arguments.length > 2) {
+      fn = $.proxy(handler, scope);
+    }
+    return this.each(function(){
+      $(this).bind(eventType, eventData, fn);
+    });
+    
+  };
+})(jQuery);
