@@ -24,7 +24,7 @@ $.ui.uicomponent.subclass("ui.basic", {
   
   _clickMe_clickHandler: function(e){
     console.log("clicked");
-    this.trace("hola putos!" + this.queno);
+    this.trace("hola!" + this.queno);
     this.currentState("loading");
   },
   
