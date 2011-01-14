@@ -5,3 +5,5 @@ libraries/*
 build.properties
 .tmp*
 .externalToolBuilders/
+.settings
+.settings/*
