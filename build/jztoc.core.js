@@ -352,3 +352,8 @@ $.ui.uicomponent.subclass("ui.itemrenderer", {
     
   };
 })(jQuery);
+(function($){
+  $.fn.getChild = function(selector){
+    return $(selector, this);
+  };
+})(jQuery);

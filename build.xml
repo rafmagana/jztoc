@@ -24,6 +24,7 @@
             <fileset file="src/core/document.js"/>
             <fileset file="src/core/itemrenderer.js"/>
             <fileset file="src/plugins/addeventlistener.js"/>
+            <fileset file="src/plugins/getchild.js"/>
         </concat>
         <echo message="${JZ} built."/>
     </target>
@@ -56,7 +57,7 @@
                 <include name="jztoc.core.js"/>
             </fileset>
             <arg line="-jar"/>
-            <arg path="libraries/compiler.jar"/>
+            <arg path="closure-compiler/compiler.jar"/>
             
             <arg value="--warning_level"/>
             <arg value="QUIET"/>
@@ -71,7 +72,7 @@
                 <include name="jztoc.widgets.js"/>
             </fileset>
             <arg line="-jar"/>
-            <arg path="libraries/compiler.jar"/>
+            <arg path="closure-compiler/compiler.jar"/>
             
             <arg value="--warning_level"/>
             <arg value="QUIET"/>
