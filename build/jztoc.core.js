@@ -254,6 +254,8 @@ $.ui.widget.subclass("ui.uicomponent", {
   /**
    * add content specified as the parameter to the end of the <code>this.element</code>. If the 
    * <code>id</code> attribute is set, it will add the element to the <code>this.elements</code> collection.
+   * the state function will recieve a parameter with the value of the previous sate, if previous state 
+   * was not set null will be returned
    */
   addChild: function(child){
     var child = $(child).appendTo(this.element);
@@ -266,6 +268,8 @@ $.ui.widget.subclass("ui.uicomponent", {
   currentState: function(state, execute){
     if (arguments.length == 0) 
       return this.__currentState;
+    
+    var previousStep = this.__currentState;
     
     if (this.states != null) {
       this.__currentState = state;
@@ -283,7 +287,7 @@ $.ui.widget.subclass("ui.uicomponent", {
       else 
         $(this.element).trigger(StateEvents.ENTERSTATE);
       
-      $.proxy(this.states[state], this)();
+      $.proxy(this.states[state], this)(previousStep);
       
       if (this.states._endState != null) 
         $.proxy(this.states._endState, this)(state);
