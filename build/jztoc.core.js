@@ -176,11 +176,13 @@ $.ui.widget.subclass("ui.uicomponent", {
 	 */
 	_create : function() {
 		this.element.addClass("ui-component");
+		
 		if (this._helpers != null) {
 			for ( var i in this._helpers) {
 				$.extend(this, this._helpers[i]);
 			}
 		}
+		
 
 		var _states = {};
 		for ( var i in this._states) {
@@ -383,9 +385,12 @@ $.ui.uicomponent.subclass("ui.itemrenderer", {
 })(jQuery);
 (function($){
   $.fn.getChild = function(selector){
+	  console.log (selector, this);
 	  if (jQuery.type(selector)=="number") {
 		  return $(this).children().eq(selector);
 	  }
     return $(selector, this);
   };
 })(jQuery);
+
+console.log ("added");

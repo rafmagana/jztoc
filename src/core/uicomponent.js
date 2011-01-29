@@ -131,11 +131,13 @@ $.ui.widget.subclass("ui.uicomponent", {
 	 */
 	_create : function() {
 		this.element.addClass("ui-component");
+		
 		if (this._helpers != null) {
 			for ( var i in this._helpers) {
 				$.extend(this, this._helpers[i]);
 			}
 		}
+		
 
 		var _states = {};
 		for ( var i in this._states) {
