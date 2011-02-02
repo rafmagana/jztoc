@@ -70,6 +70,8 @@ $.ui.uicomponent.subclass("ui.list", {
 			if (typeof label == "string" && this.options.showToolTip == true) {
 				rowInstance.attr("title", label);
 			}
+			
+			rowInstance.addClass("row");
 
 			if (this.options.styleFunction != null) {
 				this.options.styleFunction(rowInstance, index, rowData, this.options);

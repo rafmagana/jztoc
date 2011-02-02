@@ -1,3 +1,4 @@
+<!--ant-->
 <project name="jztoc" default="all" basedir=".">
     
     <property name="PREFIX" value="."/>
