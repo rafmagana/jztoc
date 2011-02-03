@@ -193,13 +193,10 @@ $.ui.uicomponent.subclass("ui.grid", {
 		}, 200);
 
 	},
-	hideLoading : function() {
-
+	hideLoading : function()
+	{
 		this.table.removeClass("loading");
-
-		this.tableBody.animate( {
-			opacity : 1
-		}, 200);
+		this.tableBody.animate({opacity : 1	}, 200);
 	},
 
 	_applyStyle : function(target, styleDefinition) {
@@ -216,7 +213,8 @@ $.ui.uicomponent.subclass("ui.grid", {
 	_guid : function() {
 		var S4 = function() {
 			return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-		}
+		};
+		
 		return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 	},
 

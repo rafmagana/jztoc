@@ -6,18 +6,20 @@ $.ui.uicomponent.subclass("ui.itemrenderer", {
 			column : null, // reference to the column's definition
 			index : null, // index of item inside the containing array (data provider)
 			td : null, // reference to the td DOM object contairer (when applies)
-			tr : null
-		// reference to the tr DOM object contairer (when applies)
-	}
-},
+			tr : null // reference to the tr DOM object contairer (when applies)
+		}
+	},
 
-	_create : function() {
+	_create : function()
+	{
 		this.element.addClass("ui-itemrenderer");
 	},
 
-	_dispatchEvent : function(eventType, data) {
+	_dispatchEvent : function(eventType, data)
+	{
 		var event = jQuery.Event(eventType);
-		if (data != null) {
+		if (data != null)
+		{
 			$.extend(event, data);
 		}
 		event.listData = this.options.listData;
@@ -25,8 +27,8 @@ $.ui.uicomponent.subclass("ui.itemrenderer", {
 	},
 
 	// ------------------------------------------------------------------------------
-	destroy : function() {
+	destroy : function()
+	{
 		$.Widget.prototype.destroy.apply(this, arguments);
 	}
-
 });

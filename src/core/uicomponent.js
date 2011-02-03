@@ -1,281 +1,311 @@
 $.ui.widget.subclass("ui.uicomponent", {
 	options : {
 		/**
-		 * data property is initialized with an empty object <code>{}</code>. 
-		 */
-		data : {},
+		* data property is initialized with an empty object <code>{
+		}</code>. 
+		*/
+		data : {
+		},
 
 		/**
-		 * if <code>getChildren</code> is set to true, the widget upon creation will add all the elements with an 
-		 * <code>id</code> attribute set to the <code>elements</code> collection for later access.
-		 */
+		* if <code>getChildren</code> is set to true, the widget upon creation will add all the elements with an 
+		* <code>id</code> attribute set to the <code>elements</code> collection for later access.
+		*/
 		getChildren : true,
 
 		/**
-		 * if <code>renderHtmlTemplate</code> set to true, the widget upon creation will try to render into its 
-		 * self any content provided on the <code>htmlTemplate</code> option.
-		 */
+		* if <code>renderHtmlTemplate</code> set to true, the widget upon creation will try to render into its 
+		* self any content provided on the <code>htmlTemplate</code> option.
+		*/
 		renderHtmlTemplate : false,
 
 		/**
-		 * Content to be rendered into the widget's <code>this.element</code> element.
-		 */
+		* Content to be rendered into the widget's <code>this.element</code> element.
+		*/
 		htmlTemplate : ""
 	},
 
 	/**
-	 * The <code>_helpers</code> property is an array that intended to hold instances of any object you
-	 * wish to append (extend) in to the widget's structure.
-	 * 
-	 * This is similar to using an 'include' statement as in other languages. the intention of a helper is to 
-	 * share common methods that do not necessarily need to be part of a widget to be used in subclassing.
-	 * 
-	 * Use case:
-	 * 
-	 * Take for example some validation methods, you may want to validate if form element is valid. for this
-	 * you have many ways to implement your method into the widget. 
-	 * 
-	 *  - One would be declaring a global validation method and just execute it where ever you want, but 
-	 *  this is ugly :).
-	 *  
-	 *   - Another way would be to have a base widget that has all of your validation routines and you would
-	 *   have to sublclass that widget to access them.
-	 *   
-	 *   - <b>helpers</b> intend to make your life easier, you may declare an object with the validation
-	 *   methods and then add them as includes to your class, this way you can at any point add validation 
-	 *   features to any object without the need of subclassing, and keeping your code encapsulated. 
-	 *   
-	 *   Example:
-	 *   
-	 *   Say you want to check if a text input is more than 4 chars long, so, in a separete file 
-	 *   (eg. form.validation.js) you create your helper:
-	 *   
-	 *    <code>
-	 *    var FormValidation = {
-	 *          validateLengh: function (value) {
-	 *            return value.length > 5;
-	 *          }
-	 *    }
-	 *    </code>
-	 *    
-	 *    then on your widget declaration you do:
-	 *    
-	 *    <code>
-	 *    _helpers[FormValidation]
-	 *    </code>
-	 *   
-	 *   now you are ready to use your helpers! inside your widget you may do:
-	 *   
-	 *   <code>
-	 *   submitform: function () {
-	 *        if (this.validateLengh($('input #name').val()) {
-	 *           // execute ajax!
-	 *        }
-	 *   }
-	 *   </code>
-	 *   
-	 */
+	* The <code>_helpers</code> property is an array that intended to hold instances of any object you
+	* wish to append (extend) in to the widget's structure.
+	* 
+	* This is similar to using an 'include' statement as in other languages. the intention of a helper is to 
+	* share common methods that do not necessarily need to be part of a widget to be used in subclassing.
+	* 
+	* Use case:
+	* 
+	* Take for example some validation methods, you may want to validate if form element is valid. for this
+	* you have many ways to implement your method into the widget. 
+	* 
+	*  - One would be declaring a global validation method and just execute it where ever you want, but 
+	*  this is ugly :).
+	*  
+	*   - Another way would be to have a base widget that has all of your validation routines and you would
+	*   have to sublclass that widget to access them.
+	*   
+	*   - <b>helpers</b> intend to make your life easier, you may declare an object with the validation
+	*   methods and then add them as includes to your class, this way you can at any point add validation 
+	*   features to any object without the need of subclassing, and keeping your code encapsulated. 
+	*   
+	*   Example:
+	*   
+	*   Say you want to check if a text input is more than 4 chars long, so, in a separete file 
+	*   (eg. form.validation.js) you create your helper:
+	*   
+	*    <code>
+	*    var FormValidation = {
+	*          validateLengh: function (value)
+	{
+	*            return value.length > 5;
+	*
+	}
+	*
+	}
+	*    </code>
+	*    
+	*    then on your widget declaration you do:
+	*    
+	*    <code>
+	*    _helpers[FormValidation]
+	*    </code>
+	*   
+	*   now you are ready to use your helpers! inside your widget you may do:
+	*   
+	*   <code>
+	*   submitform: function ()
+	{
+	*        if (this.validateLengh($('input #name').val())
+	{
+	*           // execute ajax!
+	*
+	}
+	*
+	}
+	*   </code>
+	*   
+	*/
 	_helpers : [],
 
 	/**
-	 * The idea of having this collection is so we can easily access any element inside the widget. Elements
-	 * need to have their <code>id</code> attribute set in order to be present on the collection.  for more
-	 * explanation on how you may access check the <code>_getChildren()</code> method.
-	 */
-	elements : {},
+	* The idea of having this collection is so we can easily access any element inside the widget. Elements
+	* need to have their <code>id</code> attribute set in order to be present on the collection.  for more
+	* explanation on how you may access check the <code>_getChildren()</code> method.
+	*/
+	elements : {
+	},
 
 	/**
-	 * States can provide a way to describe the different states of your components. each state is declared 
-	 * as a javascript function where you can alter the way your component behaves or looks.
-	 * 
-	 * The <code>states</code> object is a simple object used to define states of the widget. You may 
-	 * change from state to state with the <code>currentState</code> method. 
-	 * 
-	 * When ever a state is changed, some events will be triggered in the following order: 
-	 * <code>
-	 * StateEvents.EXITSTATE
-	 * StateEvents.ENTERSTATE
-	 * -- new state is executed
-	 * StateEvents.ENDSTATE
-	 * </code>
-	 * 
-	 * To declare a new state you can simply add a new method to the <code>states</code> object as 
-	 * shown here:
-	 * <code>
-	 * states: {
-	 *     searchView: function() {
-	 *         // clean form elements
-	 *         // if there are results from a previous operation, fade them
-	 *     },
-	 *     resultView:function() {
-	 *         // clean previous results
-	 *         // show new results, change opacity of results area
-	 *      }
-	 * },
-	 * </code>
-	 * 
-	 * States as any other object in the widget will get merged or overwritten (if declared in parent widget) 
-	 * when subclassed. 
-	 * 
-	 */
+	* States can provide a way to describe the different states of your components. each state is declared 
+	* as a javascript function where you can alter the way your component behaves or looks.
+	* 
+	* The <code>states</code> object is a simple object used to define states of the widget. You may 
+	* change from state to state with the <code>currentState</code> method. 
+	* 
+	* When ever a state is changed, some events will be triggered in the following order: 
+	* <code>
+	* StateEvents.EXITSTATE
+	* StateEvents.ENTERSTATE
+	* -- new state is executed
+	* StateEvents.ENDSTATE
+	* </code>
+	* 
+	* To declare a new state you can simply add a new method to the <code>states</code> object as 
+	* shown here:
+	* <code>
+	* states: {
+	*     searchView: function()
+	{
+	*         // clean form elements
+	*         // if there are results from a previous operation, fade them
+	*
+	},
+	*     resultView:function()
+	{
+	*         // clean previous results
+	*         // show new results, change opacity of results area
+	*
+	}
+	*
+	},
+	* </code>
+	* 
+	* States as any other object in the widget will get merged or overwritten (if declared in parent widget) 
+	* when subclassed. 
+	* 
+	*/
 	states : {
 		_enterState : null,
 		_exitState : null
 	},
 
 	/**
-	 * if any helper is defined it will add it to the base class of the widget.
-	 * when executed, it will run depending on the widget's configuration the methods:
-	 * <code>_renderHtmlTemplate()</code>
-	 * <code>_getChildren()</code>
-	 */
-	_create : function() {
+	* if any helper is defined it will add it to the base class of the widget.
+	* when executed, it will run depending on the widget's configuration the methods:
+	* <code>_renderHtmlTemplate()</code>
+	* <code>_getChildren()</code>
+	*/
+	_create : function()
+	{
 		this.element.addClass("ui-component");
-		
-		if (this._helpers != null) {
-			for ( var i in this._helpers) {
-				$.extend(this, this._helpers[i]);
+		if (this._helpers != null)
+		{
+			for (var helpersKey in this._helpers)
+			{
+				$.extend(this, this._helpers[helpersKey]);
 			}
 		}
-		
-
-		var _states = {};
-		for ( var i in this._states) {
-			_states[this._states[i]] = this._states[i];
+		var _states = {
+		};
+		for (var statesKey in this._states)
+		{
+			_states[this._states[statesKey]] = this._states[statesKey];
 		}
-
 		this._states = _states;
-
-		if (this.options.renderHtmlTemplate == true) {
+		if (this.options.renderHtmlTemplate == true)
+		{
 			this._renderHtmlTemplate();
 		}
-
-		if (this.options.getChildren == true) {
+		if (this.options.getChildren == true)
+		{
 			this._getChildren();
 		}
 	},
 
 	/**
-	 * Searches for all the children elements that have a specified <code>id</code> attribute and adds 
-	 * them to the <code>this.element</code> widget property. 
-	 * 
-	 * Use: if inside the the widget we have something declared such as:
-	 * <code><span id='mySpan' >Hello</span></code>
-	 * Once this method runs, we will be able to access it via:
-	 * <code>this.elements.mySpan</code>  
-	 */
-	_getChildren : function() {
+	* Searches for all the children elements that have a specified <code>id</code> attribute and adds 
+	* them to the <code>this.element</code> widget property. 
+	* 
+	* Use: if inside the the widget we have something declared such as:
+	* <code><span id='mySpan' >Hello</span></code>
+	* Once this method runs, we will be able to access it via:
+	* <code>this.elements.mySpan</code>  
+	*/
+	_getChildren : function()
+	{
 		var collection = [];
-		$('[id]', this.element).each(function() {
-			if ($(this).attr('id') != null) {
-				collection.push( {
+		$('[id]', this.element).each(function()
+		{
+			if ($(this).attr('id') != null)
+			{
+				collection.push({
 					id : $(this).attr('id'),
 					instance : $(this)
 				});
 			}
 		});
-		this.elements = {};
-		for ( var index in collection) {
+		this.elements = {
+		};
+		for (var index in collection)
+		{
 			var o = collection[index];
 			this.elements[o.id] = o.instance;
 		}
 	},
 
-	_renderHtmlTemplate : function(selector) {
-		if (this.options.htmlTemplate == null || this.options.htmlTemplate == "") {
+	_renderHtmlTemplate : function(selector)
+	{
+		if (this.options.htmlTemplate == null || this.options.htmlTemplate == "")
+		{
 			return;
 		}
-
 		$(object).trigger(UIComponentEvents.STARTRENDERING);
-
 		var object = this.element;
-		if (selector != null) {
-			if (typeof (selector) !== "string") {
+		if (selector != null)
+		{
+			if (typeof (selector) !== "string")
+			{
 				object = selector;
-			} else {
+			}
+			else
+			{
 				object = $(selector);
 			}
 		}
 		object.html(this.options.htmlTemplate);
-
 		$(object).trigger(UIComponentEvents.FINISHRENDERING);
 	},
 
 	/**
-	 * get element that is child of the widget, any selector can be passed.
-	 */
-	getChild : function(selector) {
+	* get element that is child of the widget, any selector can be passed.
+	*/
+	getChild : function(selector)
+	{
 		return $(selector, this.element);
 	},
 
 	/**
-	 * add content specified as the parameter to the end of the <code>this.element</code>. If the 
-	 * <code>id</code> attribute is set, it will add the element to the <code>this.elements</code> collection.
-	 * the state function will recieve a parameter with the value of the previous sate, if previous state 
-	 * was not set null will be returned
-	 */
-	addChild : function(child) {
-		var child = $(child).appendTo(this.element);
+	* add content specified as the parameter to the end of the <code>this.element</code>. If the 
+	* <code>id</code> attribute is set, it will add the element to the <code>this.elements</code> collection.
+	* the state function will recieve a parameter with the value of the previous sate, if previous state 
+	* was not set null will be returned
+	*/
+	addChild : function(selector)
+	{
+		var child = $(selector).appendTo(this.element);
 		var id = child.attr("id");
 		if (id != null)
-			this.elements.push[id] = child;
+		this.elements.push[id] = child;
 		return child;
 	},
 
 	__currentState : null,
-	currentState : function(state) {
+	currentState : function(state)
+	{
 		if (arguments.length == 0)
-			return this.__currentState;
-
+		return this.__currentState;
 		var previousStep = this.__currentState;
-
 		var states = state.split(' ');
-
 		var args = new Array();
-		for ( var i = 1; i < arguments.length; i++) {
-			args.push(arguments[i]);
-		}
-
-		if (this.states != null) {
-			this.__currentState = states[states.length - 1];
-			if (this.states._exitState != null) {
-				this.states._exitState.apply(this, [ state ]);
-			} else {
-				$(this.element).trigger(StateEvents.EXITSTATE);
+		for (var i = 1;
+			i < arguments.length;
+			i++)
+			{
+				args.push(arguments[i]);
 			}
-
-			if (this.states._enterState != null)
+			if (this.states != null)
+			{
+				this.__currentState = states[states.length - 1];
+				if (this.states._exitState != null)
+				{
+					this.states._exitState.apply(this, [ state ]);
+				}
+				else
+				{
+					$(this.element).trigger(StateEvents.EXITSTATE);
+				}
+				if (this.states._enterState != null)
 				this.states._enterState.apply(this, [ state ]);
-			else
+				else
 				$(this.element).trigger(StateEvents.ENTERSTATE);
-
-			for ( var index in states) {
-				if (previousStep == null)
+				for (var index in states)
+				{
+					if (previousStep == null)
 					previousStep = "";
-				args.splice(0, 0, previousStep);
-				this.states[states[index]].apply(this, args);
-				previousStep = states[index];
-				args.splice(0, 1);
-			}
-
-			if (this.states._endState != null)
+					args.splice(0, 0, previousStep);
+					this.states[states[index]].apply(this, args);
+					previousStep = states[index];
+					args.splice(0, 1);
+				}
+				if (this.states._endState != null)
 				this.states._endState.apply(this, [ state ]);
-			else
+				else
 				$(this.element).trigger(StateEvents.ENDSTATE);
+			}
+			return false;
+		},
 
+		_updateView : function()
+		{
+		},
+
+		invalidateView : function()
+		{
+			this._updateView();
+		},
+
+		// ------------------------------------------------------------------------------
+		destroy : function()
+		{
+			$.Widget.prototype.destroy.apply(this, arguments);
 		}
-	},
-
-	_updateView : function() {
-	},
-
-	invalidateView : function() {
-		this._updateView();
-	},
-
-	// ------------------------------------------------------------------------------
-	destroy : function() {
-		$.Widget.prototype.destroy.apply(this, arguments);
-	}
-
-});
+	});

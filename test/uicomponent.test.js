@@ -12,7 +12,6 @@ $.ui.uicomponent.subclass("ui.uicomponenttest", {
 		getChildren : true,
 		renderHtmlTemplate : true,
 		htmlTemplate : "<span id='span1'>test</span>",
-
 		created : false,
 		initialized : false
 	},
@@ -20,6 +19,7 @@ $.ui.uicomponent.subclass("ui.uicomponenttest", {
 	_helpers : [ TestHelper ],
 
 	_create : function() {
+		ready
 		this.options.created = true;
 	},
 
@@ -37,5 +37,5 @@ $.ui.uicomponent.subclass("ui.uicomponenttest", {
 			this.element.attr("data-state", "test");
 		}
 	}
-
 });
+

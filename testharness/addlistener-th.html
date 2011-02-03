@@ -1,47 +1,47 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <title>jztoc  - test harness</title>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
-        </script>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js">
-        </script>
-        <link rel="stylesheet" type="text/css" href="../src/css/grid.css">
-        <script type="text/javascript" src="../src/core/events.js">
-        </script>
-        <script type="text/javascript" src="../src/subclass.js"></script>
-        <script type="text/javascript" src="../src/core/uicomponent.js">
-        </script>
-        <script type="text/javascript" src="../src/plugins/addeventlistener.js">
-        </script>
-        <script type="text/javascript">
-            
-            $.ui.uicomponent.subclass("ui.state", {
-              options: {
-                name: "Texas"
-              },
-              _create: function () {
-                this.elements.showName.addEventListener(MouseEvents.CLICK, this._showName_clickHandler, this, {home:"arlington"});
-              },
-              
-              _showName_clickHandler: function (e) {
-                console.log ("event: ", e);
-                console.log ("eventData: ", e.data);
-                this.elements.name.text(this.options.name);
-              }
-            });
-            
-            $(function(){
-              $("#state").state();
-            });
-        </script>
-    </head>
-    <body>
-        <div id="state">
-            <span id="name">Name goes here</span>
-            <hr/>
-            <button id="showName">show name</button>
-        </div>
-    </body>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>jztoc  - test harness</title>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
+	</script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js">
+	</script>
+	<link rel="stylesheet" type="text/css" href="../src/css/grid.css">
+	<script type="text/javascript" src="../src/core/events.js">
+	</script>
+	<script type="text/javascript" src="../src/subclass.js"></script>
+	<script type="text/javascript" src="../src/core/uicomponent.js">
+	</script>
+	<script type="text/javascript" src="../src/plugins/addeventlistener.js">
+	</script>
+	<script type="text/javascript">
+
+	$.ui.uicomponent.subclass("ui.state", {
+		options: {
+			name: "Texas"
+		},
+		_create: function () {
+			this.elements.showName.addEventListener(MouseEvents.CLICK, this._showName_clickHandler, this, {home:"arlington"});
+		},
+
+		_showName_clickHandler: function (e) {
+			console.log ("event: ", e);
+			console.log ("eventData: ", e.data);
+			this.elements.name.text(this.options.name);
+		}
+	});
+
+	$(function(){
+		$("#state").state();
+	});
+	</script>
+</head>
+<body>
+	<div id="state">
+		<span id="name">Name goes here</span>
+		<hr/>
+		<button id="showName">show name</button>
+	</div>
+</body>
 </html>
