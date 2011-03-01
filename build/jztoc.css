@@ -18,3 +18,19 @@ table.grid .sortable { }
 table.grid td.column {}
 table.grid .loading {}
 
+.ui-list {
+	width : 80px;
+	height : 100px;
+	padding : 2px;
+	border: 1px solid #C7C7C7;
+	white-space : nowrap;
+	overflow-x : hidden;	
+}
+
+.ui-list .row {
+	cursor: default;
+}
+
+.ui-list .row:hover {
+	background: #C8E9FF;
+}

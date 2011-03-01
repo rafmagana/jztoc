@@ -1,0 +1,16 @@
+.ui-list {
+	border: 1px solid #C7C7C7;
+	height : 100px;
+	overflow-x : hidden;	
+	padding : 2px;
+	white-space : nowrap;
+	width : 80px;
+}
+
+.ui-list .row {
+	cursor: default;
+}
+
+.ui-list .row:hover {
+	background: #C8E9FF;
+}

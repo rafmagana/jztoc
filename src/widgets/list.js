@@ -11,20 +11,11 @@ $.ui.uicomponent.subclass("ui.list", {
 			label : "loading..",
 			imageUrl : ""
 		},
-		style : {
-			width : 80,
-			height : 100,
-			padding : 2,
-			"background-color" : "#fff",
-			"white-space" : "nowrap",
-			"overflow-x" : "hidden"
-		},
 		selectedClass : "selected"
 	},
 
 	_create : function() {
 		this.element.addClass("ui-list");
-		this.element.css(this.options.style);
 	},
 
 	_init : function() {
@@ -97,6 +88,10 @@ $.ui.uicomponent.subclass("ui.list", {
 		e.stopPropagation();
 		this.element.children().removeClass(this.options.selectedClass);
 		$(e.currentTarget).addClass(this.options.selectedClass);
+		
+		var event = jQuery.Event("itemclick.list");
+		event.selectedIndex = $(e.currentTarget).index();
+		this.element.trigger(event);
 	},
 
 	_assignlabelData : function(rowData) {

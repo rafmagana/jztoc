@@ -11,20 +11,11 @@ $.ui.uicomponent.subclass("ui.list", {
 			label : "loading..",
 			imageUrl : ""
 		},
-		style : {
-			width : 80,
-			height : 100,
-			padding : 2,
-			"background-color" : "#fff",
-			"white-space" : "nowrap",
-			"overflow-x" : "hidden"
-		},
 		selectedClass : "selected"
 	},
 
 	_create : function() {
 		this.element.addClass("ui-list");
-		this.element.css(this.options.style);
 	},
 
 	_init : function() {
@@ -97,6 +88,10 @@ $.ui.uicomponent.subclass("ui.list", {
 		e.stopPropagation();
 		this.element.children().removeClass(this.options.selectedClass);
 		$(e.currentTarget).addClass(this.options.selectedClass);
+		
+		var event = jQuery.Event("itemclick.list");
+		event.selectedIndex = $(e.currentTarget).index();
+		this.element.trigger(event);
 	},
 
 	_assignlabelData : function(rowData) {
@@ -357,13 +352,10 @@ $.ui.uicomponent.subclass("ui.grid", {
 		}, 200);
 
 	},
-	hideLoading : function() {
-
+	hideLoading : function()
+	{
 		this.table.removeClass("loading");
-
-		this.tableBody.animate( {
-			opacity : 1
-		}, 200);
+		this.tableBody.animate({opacity : 1	}, 200);
 	},
 
 	_applyStyle : function(target, styleDefinition) {
@@ -380,7 +372,8 @@ $.ui.uicomponent.subclass("ui.grid", {
 	_guid : function() {
 		var S4 = function() {
 			return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-		}
+		};
+		
 		return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 	},
 

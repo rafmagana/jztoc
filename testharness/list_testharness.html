@@ -1,80 +1,23 @@
+<?xml version="1.0"?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <title>jztoc  - test harness</title>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
-        </script>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js">
-        </script>
-        <link rel="stylesheet" type="text/css" href="../src/css/list.css">
-        <script type="text/javascript" src="../src/subclass.js"></script>
-        <script type="text/javascript" src="../src/core/uicomponent.js"></script>
-        <script type="text/javascript" src="../src/widgets/list.js">
-        </script>
-        <script type="text/javascript">
-            $(function(){
-            
-              var style = {
-                width: 130,
-                border:"1px solid #ddd"
-              }
-            
-              var simpleListOptions = {
-                dataProvider: [1, 2, 3, 4, 5, 6,20,33,1,45,67],
-                style: style
-              }
-              
-              $("#simpleList").list(simpleListOptions);
-              
-              
-              var labelFunctionsListOptions = {
-                dataProvider: [{
-                  name: "Mia",
-                  age: "30"
-                }, {
-                  name: "Jacob",
-                  age: "30"
-                }, {
-                  name: "Ethan",
-                  age: "32"
-                }, {
-                  name: "Isabella",
-                  age: "32"
-                }, {
-                  name: "Alexander",
-                  age: "20"
-                }, {
-                  name: "Emily",
-                  age: "28"
-                }],
-                labelField: "name",
-                labelFunction: function (rowData) {
-                  return rowData.name + " is " + rowData.age;
-                },
-                style: style,
-                loading: {
-                  label:"loading...",
-                  imageUrl:"images/ajax-loader-small.gif"
-                }
-              }
-              
-              $("#labelFunctionsList").list(labelFunctionsListOptions);
-              $("#showLoading").click (function () {
-                $("#labelFunctionsList").list("showLoading");
-              }); 
-              $("#hideLoading").click (function () {
-                $("#labelFunctionsList").list("hideLoading");
-              }); 
-            });
-        </script>
-    </head>
-    <body>
-        <div id="simpleList">
-        </div>
-        <hr/>
-        <div id="labelFunctionsList">
-        </div>
-        <button id="showLoading">show loading</button> <button id="hideLoading">hide loading</button>  
-    </body>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+		<title>jztoc  - test harness</title>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
+		</script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js">
+		</script>
+		<link rel="stylesheet" type="text/css" href="../src/css/list.css"/>
+		<script type="text/javascript" src="../build/subclass.js"></script>
+		<script type="text/javascript" src="../build/jztoc.core.js"></script>
+		<script type="text/javascript" src="../src/widgets/list.js"></script>
+		<script type="text/javascript" src="list.testharness.js"></script>
+	</head>
+	<body>
+		<div id="labelFunctionsList">
+		</div>
+		<button id="showLoading">show loading</button>
+		<button id="hideLoading">hide loading</button>
+	</body>
 </html>
