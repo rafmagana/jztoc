@@ -17,9 +17,13 @@ $.ui.uicomponent.subclass("ui.uicomponenttest", {
 	},
 
 	_helpers : [ TestHelper ],
+	
+	_properties: {
+		propertyOne:1,
+		propertyTwo:2
+	},
 
 	_create : function() {
-		ready
 		this.options.created = true;
 	},
 
@@ -30,6 +34,22 @@ $.ui.uicomponent.subclass("ui.uicomponenttest", {
 
 	getElements : function() {
 		return this.elements;
+	},
+
+	hasProperty: function (name) {
+		return this[name] != null;
+	},
+	
+	testLocalProperty: function () {
+		this.propertyOne(200);
+		
+		return this.propertyOne() == 200;
+	},
+
+	_commitProperties: function () {
+		if(this._properties.propertyOneChanged) {
+			this.element.css("background", "red");
+		}
 	},
 
 	states : {

@@ -177,6 +177,12 @@ $.ui.widget.subclass("ui.uicomponent", {
 		_exitState : null
 	},
 
+
+	_properties: {
+		
+	},
+
+
 	/**
 	* if any helper is defined it will add it to the base class of the widget.
 	* when executed, it will run depending on the widget's configuration the methods:
@@ -200,6 +206,11 @@ $.ui.widget.subclass("ui.uicomponent", {
 			_states[this._states[statesKey]] = this._states[statesKey];
 		}
 		this._states = _states;
+		
+		for ( var property in this._properties) {			
+			this[property] = this.__createProperty(property);
+		}
+		
 		if (this.options.renderHtmlTemplate == true)
 		{
 			this._renderHtmlTemplate();
@@ -208,6 +219,21 @@ $.ui.widget.subclass("ui.uicomponent", {
 		{
 			this._getChildren();
 		}
+	},
+	
+
+	__createProperty : function (name) {
+		this._properties[name+"Changed"] = false;
+		return function () {
+			if(arguments.length == 0) {
+				return this._properties[name];
+			} else {
+				this._properties[name+"Changed"] = true;
+				this._properties[name] = arguments[0];
+				this.invalidateProperties();
+				return true;
+			}
+		};
 	},
 
 	/**
@@ -331,6 +357,14 @@ $.ui.widget.subclass("ui.uicomponent", {
 				$(this.element).trigger(StateEvents.ENDSTATE);
 			}
 			return false;
+		},
+
+		_commitProperties: function () {
+			
+		},
+		
+		invalidateProperties : function () {
+			this._commitProperties();
 		},
 
 		_updateView : function()

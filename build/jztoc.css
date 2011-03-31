@@ -19,12 +19,12 @@ table.grid td.column {}
 table.grid .loading {}
 
 .ui-list {
-	width : 80px;
-	height : 100px;
-	padding : 2px;
 	border: 1px solid #C7C7C7;
-	white-space : nowrap;
+	height : 100px;
 	overflow-x : hidden;	
+	padding : 2px;
+	white-space : nowrap;
+	width : 80px;
 }
 
 .ui-list .row {

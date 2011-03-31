@@ -54,13 +54,10 @@ $.ui.widget.subclass("ui.uicomponent", {
 	*   
 	*    <code>
 	*    var FormValidation = {
-	*          validateLengh: function (value)
-	{
+	*          validateLengh: function (value)	{
 	*            return value.length > 5;
-	*
-	}
-	*
-	}
+	*	}
+	*	}
 	*    </code>
 	*    
 	*    then on your widget declaration you do:
@@ -72,15 +69,11 @@ $.ui.widget.subclass("ui.uicomponent", {
 	*   now you are ready to use your helpers! inside your widget you may do:
 	*   
 	*   <code>
-	*   submitform: function ()
-	{
-	*        if (this.validateLengh($('input #name').val())
-	{
+	*   submitform: function ()	{
+	*        if (this.validateLengh($('input #name').val())	{
 	*           // execute ajax!
-	*
-	}
-	*
-	}
+	*	}
+	*	}
 	*   </code>
 	*   
 	*/
@@ -113,20 +106,15 @@ $.ui.widget.subclass("ui.uicomponent", {
 	* shown here:
 	* <code>
 	* states: {
-	*     searchView: function()
-	{
+	*     searchView: function() { 
 	*         // clean form elements
 	*         // if there are results from a previous operation, fade them
-	*
-	},
-	*     resultView:function()
-	{
+	*	},
+	*     resultView:function()	{
 	*         // clean previous results
 	*         // show new results, change opacity of results area
-	*
-	}
-	*
-	},
+	*	}
+	*	},
 	* </code>
 	* 
 	* States as any other object in the widget will get merged or overwritten (if declared in parent widget) 
@@ -139,6 +127,50 @@ $.ui.widget.subclass("ui.uicomponent", {
 	},
 
 	/**
+	* this object is an object that will hold local properties to be used in your widget, they shoudl be 
+	* delcared as key:value pairs. 
+	* each property that is declared will generate a corresponding method which will be/can be treated as
+	* a getter/setter method. 
+	* For example: if we declare the follwoing:
+	* <code>
+	* _properties: { 
+	*    canDance:true
+	* },
+	* </code>
+	* 
+	* A method will be created for that property with the same name, which you may execute as follows:
+	* 
+	* <code>
+	* _init: function (){ 
+	*    console.log(this.canDance()); // will output 'true'
+	*    this.canDance(false); // will set the value of false to this._properties.canDance
+	*    console.log(this.canDance()); // will output 'false'
+	* },
+	* </code>
+	* 
+	* Every time the 'canDance' is executed as a setter this will happen:
+	* 1. the this._properties.canDanceChanged preoprty will get changed to true;
+	* 2. the this._invalidateProeprties() method will get executed
+	* 
+	* If you wish to catch the propery change, you may use the _commitProperties method as follows:
+	* <code>
+	* _commitProperties: function () {
+	*	if(this._properties.canDanceChanged) {
+	*		// do something
+	*       this._properties.canDanceChanged = false; // reset flag
+	*	}
+	* },
+	* </code>
+	* 
+	* 
+	* 
+	*/
+	_properties: {
+
+	},
+
+
+	/**
 	* if any helper is defined it will add it to the base class of the widget.
 	* when executed, it will run depending on the widget's configuration the methods:
 	* <code>_renderHtmlTemplate()</code>
@@ -147,28 +179,44 @@ $.ui.widget.subclass("ui.uicomponent", {
 	_create : function()
 	{
 		this.element.addClass("ui-component");
-		if (this._helpers != null)
-		{
-			for (var helpersKey in this._helpers)
-			{
+		if (this._helpers != null) {
+			for (var helpersKey in this._helpers) {
 				$.extend(this, this._helpers[helpersKey]);
 			}
 		}
-		var _states = {
-		};
-		for (var statesKey in this._states)
-		{
+		var _states = {};
+		for (var statesKey in this._states)	{
 			_states[this._states[statesKey]] = this._states[statesKey];
 		}
 		this._states = _states;
-		if (this.options.renderHtmlTemplate == true)
-		{
+
+		for ( var property in this._properties) {			
+			this[property] = this.__createProperty(property);
+		}
+
+		if (this.options.renderHtmlTemplate == true) {
 			this._renderHtmlTemplate();
 		}
-		if (this.options.getChildren == true)
-		{
+		if (this.options.getChildren == true) {
 			this._getChildren();
 		}
+	},
+
+	/**
+	* Generates the getters and setters for the proeprties defined inside the _properties object.
+	*/
+	__createProperty : function (name) {
+		this._properties[name+"Changed"] = false;
+		return function () {
+			if(arguments.length == 0) {
+				return this._properties[name];
+			} else {
+				this._properties[name+"Changed"] = true;
+				this._properties[name] = arguments[0];
+				this.invalidateProperties();
+				return true;
+			}
+		};
 	},
 
 	/**
@@ -226,14 +274,6 @@ $.ui.widget.subclass("ui.uicomponent", {
 	},
 
 	/**
-	* get element that is child of the widget, any selector can be passed.
-	*/
-	getChild : function(selector)
-	{
-		return $(selector, this.element);
-	},
-
-	/**
 	* add content specified as the parameter to the end of the <code>this.element</code>. If the 
 	* <code>id</code> attribute is set, it will add the element to the <code>this.elements</code> collection.
 	* the state function will recieve a parameter with the value of the previous sate, if previous state 
@@ -256,56 +296,64 @@ $.ui.widget.subclass("ui.uicomponent", {
 		var previousStep = this.__currentState;
 		var states = state.split(' ');
 		var args = new Array();
-		for (var i = 1;
-			i < arguments.length;
-			i++)
-			{
-				args.push(arguments[i]);
-			}
-			if (this.states != null)
-			{
-				this.__currentState = states[states.length - 1];
-				if (this.states._exitState != null)
-				{
-					this.states._exitState.apply(this, [ state ]);
-				}
-				else
-				{
-					$(this.element).trigger(StateEvents.EXITSTATE);
-				}
-				if (this.states._enterState != null)
-				this.states._enterState.apply(this, [ state ]);
-				else
-				$(this.element).trigger(StateEvents.ENTERSTATE);
-				for (var index in states)
-				{
-					if (previousStep == null)
-					previousStep = "";
-					args.splice(0, 0, previousStep);
-					this.states[states[index]].apply(this, args);
-					previousStep = states[index];
-					args.splice(0, 1);
-				}
-				if (this.states._endState != null)
-				this.states._endState.apply(this, [ state ]);
-				else
-				$(this.element).trigger(StateEvents.ENDSTATE);
-			}
-			return false;
-		},
-
-		_updateView : function()
+		for (var i = 1;	i < arguments.length; i++)
 		{
-		},
-
-		invalidateView : function()
-		{
-			this._updateView();
-		},
-
-		// ------------------------------------------------------------------------------
-		destroy : function()
-		{
-			$.Widget.prototype.destroy.apply(this, arguments);
+			args.push(arguments[i]);
 		}
-	});
+		if (this.states != null)
+		{
+			this.__currentState = states[states.length - 1];
+			if (this.states._exitState != null)
+			{
+				this.states._exitState.apply(this, [ state ]);
+			}
+			else
+			{
+				$(this.element).trigger(StateEvents.EXITSTATE);
+			}
+			if (this.states._enterState != null)
+			this.states._enterState.apply(this, [ state ]);
+			else
+			$(this.element).trigger(StateEvents.ENTERSTATE);
+			for (var index in states)
+			{
+				if (previousStep == null)
+				previousStep = "";
+				args.splice(0, 0, previousStep);
+				this.states[states[index]].apply(this, args);
+				previousStep = states[index];
+				args.splice(0, 1);
+			}
+			if (this.states._endState != null)
+			this.states._endState.apply(this, [ state ]);
+			else
+			$(this.element).trigger(StateEvents.ENDSTATE);
+		}
+		return false;
+	},
+	
+	// method to be overriden, it will get executed when ever an invalidateProperties is executed
+	_commitProperties: function () {
+
+	},
+
+	// method NOT to be overriden, it is used to invalidate a property when a setter is executed
+	invalidateProperties : function () {
+		this._commitProperties();
+	},
+
+	_updateView : function()
+	{
+	},
+
+	invalidateView : function()
+	{
+		this._updateView();
+	},
+
+	// ------------------------------------------------------------------------------
+	destroy : function()
+	{
+		$.Widget.prototype.destroy.apply(this, arguments);
+	}
+});
