@@ -4,7 +4,7 @@ h2. documentation page
 
 At the moment most of the code on the main files is documented, I do intend to write more on the wiki of this project for further reference. 
 
-I have created an example project here at: https://github.com/acatl/jztoc-examples 
+I have created an example project here at: "jztoc-examples":https://github.com/acatl/jztoc-examples 
 Wiki: https://github.com/acatl/jztoc/wiki
 
 h2. what it is?
