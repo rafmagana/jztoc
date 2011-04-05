@@ -166,7 +166,7 @@ $.ui.widget.subclass("ui.uicomponent", {
 	* 
 	*/
 	_properties: {
-
+		
 	},
 
 
@@ -300,6 +300,10 @@ $.ui.widget.subclass("ui.uicomponent", {
 		{
 			args.push(arguments[i]);
 		}
+		
+		this.__executePredefinedSatates(state);
+		
+		
 		if (this.states != null)
 		{
 			this.__currentState = states[states.length - 1];
@@ -331,6 +335,28 @@ $.ui.widget.subclass("ui.uicomponent", {
 		}
 		return false;
 	},
+	
+	__executePredefinedSatates: function (state) {
+		var attr = "data-state-" + state;
+		var modifiers;
+		var tokens;
+		$("[" + attr + "]", this.element).each(function() {
+			modifiers = $(this).attr(attr); 
+			if(modifiers != null) {
+				tokens = $.parseJSON(modifiers);
+				if (tokens != null) {
+					for(var method in tokens) {
+						$(this)[method](tokens[method]);			
+					}					
+				}
+			}
+		});
+		
+		
+		
+		
+	},
+	
 	
 	// method to be overriden, it will get executed when ever an invalidateProperties is executed
 	_commitProperties: function () {

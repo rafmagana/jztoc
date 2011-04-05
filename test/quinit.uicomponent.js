@@ -5,8 +5,8 @@ $(function(){
     module("uicomponent");
     
     test("widget creation", function(){
-    
-        var uicomponent = $("<div></div>").uicomponenttest();
+    	
+        var uicomponent = $("#testContainer").uicomponenttest();
 				
         equals(uicomponent.uicomponenttest != null, true, "attachment of widget");
 		equals(uicomponent.uicomponenttest("option","created"),true, "execution of _create");
@@ -32,6 +32,7 @@ $(function(){
 		
 		/* get children */
 		equals(uicomponent.uicomponenttest("getElements").span1 != null,true, "testing getChildren");
+		
     });
     
     
