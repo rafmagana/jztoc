@@ -37,7 +37,17 @@ var UIComponentEvents = {
 	STARTRENDERING: "startrendering",
 	FINISHRENDERING: "finishrendering"
 };
-$.ui.widget.subclass("ui.uicomponent", {
+jQuery.extend({
+	jztocSetup: function (settings) {
+		var target = jQuery.extend( true, jQuery.jztocSettings, settings);
+		return target;
+	},
+	
+	jztocSettings: {
+		autoLoadApp:true,
+		widgetDefinition: "data-widget"
+	}
+});$.ui.widget.subclass("ui.uicomponent", {
 	options : {
 		/**
 		* data property is initialized with an empty object <code>{
@@ -390,10 +400,6 @@ $.ui.widget.subclass("ui.uicomponent", {
 				}
 			}
 		});
-		
-		
-		
-		
 	},
 	
 	
@@ -491,4 +497,15 @@ $.ui.uicomponent.subclass("ui.itemrenderer", {
 		}
 		return $(selector, this);
 	};
-	})(jQuery);
+	})(jQuery);$(document).ready(function() {
+	var jztocSettings = jQuery.jztocSettings;
+	if(jztocSettings.autoLoadApp==true) {
+		var dataClass = $("body").attr(jztocSettings.widgetDefinition);
+		if(dataClass!=null) {
+			if ( jQuery.type($(document)[dataClass])=="function") {
+				$("body")[dataClass]();
+			}
+		}
+	};
+});
+

@@ -21,11 +21,13 @@
         <mkdir dir="${dist}"/>
         <concat destfile="${JZ}">
             <fileset file="src/core/events.js"/>
+			<fileset file="src/core/jztoc.js"/>
             <fileset file="src/core/uicomponent.js"/>
             <fileset file="src/core/document.js"/>
             <fileset file="src/core/itemrenderer.js"/>
             <fileset file="src/plugins/addeventlistener.js"/>
             <fileset file="src/plugins/getchild.js"/>
+			<fileset file="src/core/jztoc.load.js"/>
         </concat>
         <echo message="${JZ} built."/>
     </target>

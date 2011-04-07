@@ -351,10 +351,6 @@ $.ui.widget.subclass("ui.uicomponent", {
 				}
 			}
 		});
-		
-		
-		
-		
 	},
 	
 	

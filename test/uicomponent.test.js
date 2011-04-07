@@ -10,8 +10,6 @@ var TestHelper = {
 $.ui.uicomponent.subclass("ui.uicomponenttest", {
 	options : {
 		getChildren : true,
-		renderHtmlTemplate : false,
-		htmlTemplate : "<span id='span1'>test</span>",
 		created : false,
 		initialized : false
 	},
@@ -48,8 +46,9 @@ $.ui.uicomponent.subclass("ui.uicomponenttest", {
 
 	_commitProperties: function () {
 		if(this._properties.propertyOneChanged) {
+			console.log('this._properties.propertyOneChanged');
 			this._properties.propertyOneChanged = false;
-			this.element.css("background", "red");
+			this.element.attr("data-propertyOne", this.propertyOne());
 		}
 	},
 
