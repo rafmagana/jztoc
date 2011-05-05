@@ -76,81 +76,96 @@ $.ui.uicomponent.subclass("ui.grid", {
 
 		var rows = this.options.dataProvider;
 
-		for ( var index in rows) {
-			var rowData = rows[index];
-			var tr = $("<tr></tr>").appendTo(this.tableBody);
-			var tr_guid = this._guid();
-			tr.attr("data-uid", tr_guid);
-			if (this.options.rowFunction != null) {
-				this.options.rowFunction(tr, index, rowData);
-			}
-
-			for ( var c in this.options.columns) {
-				var columnDefinition = this.options.columns[c];
-				var td = $('<td></td>').appendTo(tr);
-				td.addClass('col' + c + '');
-				td.addClass("column");
-
-				td.attr("data-field", columnDefinition.field);
-
-				if (columnDefinition.width != null) {
-					try {
-						td.css("width", columnDefinition.width);
-					} 
-					catch (err) {
-						console.log(err)
-					}
-				}
-
-				this._applyStyle(td, columnDefinition.style);
-				
-				if(columnDefinition.customAttributes != null) {
-					try {
-						td.attr( columnDefinition.customAttributes );
-					} 
-					catch (err) {
-						console.log(err)
-					}
-				}
-
-				var label = this._assignlabelData(rowData, columnDefinition);
-
-				if (columnDefinition.visible == false) {
-					td.hide();
-				}
-
-				if (columnDefinition.itemRenderer != null) {
-					var listData = {
-						owner : this,
-						data : rowData,
-						column : columnDefinition,
-						index : index,
-						td : td,
-						tr : tr
-					};
-
-					var passedObjects = {
-						data : label,
-						listData : listData
-					};
-					if (columnDefinition.itemRendererOptions != null) {
-						jQuery.extend(passedObjects, columnDefinition.itemRendererOptions);
-					}
-
-					$(td)[columnDefinition.itemRenderer](passedObjects);
-				} else {
-					td.html(label);
-				}
-
-				if (typeof label == "string" && columnDefinition.showToolTip == true) {
-					td.attr("title", label);
-				}
-
-				if (columnDefinition.styleFunction != null) {
-					columnDefinition.styleFunction(td, index, rowData, columnDefinition);
-				}
+		for ( var rowIndex in rows) {
+			var rowData = rows[rowIndex];
+			var tr = this._buildRow(rowIndex, rowData, this.tableBody);
+			for ( var columnIndex in this.options.columns) {
+				var columnDefinition = this.options.columns[columnIndex];
+				var td = this._buildCell(tr, rowIndex, rowIndex, rowData, columnDefinition);
+				tr.append(td);
 			}
 		}
+	},
+	
+	_buildRow: function (rowIndex, rowData, tableBody) {
+		
+		var tr = $("<tr></tr>").appendTo(tableBody);
+		var tr_guid = this._guid();
+		tr.attr("data-uid", tr_guid);
+		
+		if (this.options.rowFunction != null) {
+			this.options.rowFunction(tr, rowIndex, rowData);
+		}
+		
+		return tr;
+	},
+	
+	_buildCell: function (tr, rowIndex, columnIndex, rowData, columnDefinition) {
+		var td = $('<td></td>');
+		
+		td.addClass('col' + columnIndex + '');
+		td.addClass("column");
+
+		td.attr("data-field", columnDefinition.field);
+
+		if (columnDefinition.width != null) {
+			try {
+				td.css("width", columnDefinition.width);
+			} 
+			catch (err) {
+				console.log(err);
+			}
+		}
+
+		this._applyStyle(td, columnDefinition.style);
+		
+		if(columnDefinition.customAttributes != null) {
+			try {
+				td.attr( columnDefinition.customAttributes );
+			} 
+			catch (err) {
+				console.log(err);
+			}
+		}
+
+		var label = this._assignlabelData(rowData, columnDefinition);
+
+		if (columnDefinition.visible == false) {
+			td.hide();
+		}
+
+		if (columnDefinition.itemRenderer != null) {
+			var listData = {
+				owner : this,
+				data : rowData,
+				column : columnDefinition,
+				index : rowIndex,
+				td : td,
+				tr : tr
+			};
+
+			var passedObjects = {
+				data : label,
+				listData : listData
+			};
+			if (columnDefinition.itemRendererOptions != null) {
+				jQuery.extend(passedObjects, columnDefinition.itemRendererOptions);
+			}
+
+			$(td)[columnDefinition.itemRenderer](passedObjects);
+		} else {
+			td.html(label);
+		}
+
+		if (typeof label == "string" && columnDefinition.showToolTip == true) {
+			td.attr("title", label);
+		}
+
+		if (columnDefinition.styleFunction != null) {
+			columnDefinition.styleFunction(td, rowIndex, rowData, columnDefinition);
+		}
+		
+		return td;
 	},
 
 	_assignlabelData : function(rowData, columnDefinition) {
