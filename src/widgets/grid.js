@@ -94,10 +94,24 @@ $.ui.uicomponent.subclass("ui.grid", {
 				td.attr("data-field", columnDefinition.field);
 
 				if (columnDefinition.width != null) {
-					td.css("width", columnDefinition.width);
+					try {
+						td.css("width", columnDefinition.width);
+					} 
+					catch (err) {
+						console.log(err)
+					}
 				}
 
 				this._applyStyle(td, columnDefinition.style);
+				
+				if(columnDefinition.customAttributes != null) {
+					try {
+						td.attr( columnDefinition.customAttributes );
+					} 
+					catch (err) {
+						console.log(err)
+					}
+				}
 
 				var label = this._assignlabelData(rowData, columnDefinition);
 
