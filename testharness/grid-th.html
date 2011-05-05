@@ -10,7 +10,47 @@
         <link rel="stylesheet" type="text/css" href="../src/css/grid.css">
         <script type="text/javascript" src="../src/subclass.js"></script>
         <script type="text/javascript" src="../src/core/uicomponent.js"></script>
+        <script type="text/javascript" src="../src/core/itemrenderer.js"></script>
         <script type="text/javascript" src="../src/widgets/grid.js"></script>
+        
+        <!-- Custom Header Renderer -->
+        <script type="text/javascript">
+          $.ui.itemrenderer.subclass("ui.customheader", {
+          	options : {
+          		listData : {
+          			owner : null, // reference to the widget's holder
+          			data : null, // reference to the entire row's data
+          			column : null, // reference to the column's definition
+          			index : null, // index of item inside the containing array (data provider)
+          			th : null, // reference to the td DOM object contairer (when applies)
+          			tr : null // reference to the tr DOM object contairer (when applies)
+          		}
+          	},
+
+          	_create : function()
+          	{
+          		this.element.addClass("ui-customheader");
+          		this.element.text(this.options.listData.column.label);
+          		
+          		var button = $("<button>nothing</button>")
+          		.appendTo(this.element)
+          		.click($.proxy(this._clickHandler, this));
+          	},
+          	
+          	_clickHandler: function(e) {
+          	  this._dispatchEvent("headerclick", "someParameter");
+          	},
+          	
+          	// ------------------------------------------------
+          	destroy : function()
+          	{
+          	  this.element.removeClass("ui-customheader");
+          		$.Widget.prototype.destroy.apply(this, arguments);
+          	}
+          });
+          
+        </script>
+        
         <script type="text/javascript">
             $(function(){
             
@@ -24,7 +64,8 @@
                   }, 
                   customAttributes: {
                     "data-custom":"some value"
-                  }
+                  }, 
+                  headerRenderer: "customheader"
                 }, {
                   label: "E-mail",
                   width: 200,
@@ -49,14 +90,16 @@
               
               $("#datagrid").grid(options);
               
+              $("#datagrid").bind("headerclick", function (e, parameter) {
+                console.log("event data: ", e, " parameter: ", parameter);
+                alert("header with label: '" + e.listData.column.label + "' was clicked!");
+              });
               
             });
         </script>
     </head>
     <body>
-        <div id="range">
-            Select a range.
-        </div>
+        <h2>Awesome Grid Widget</h2>
         <hr/>
         <div id="datagrid" style="width:500px;">
         </div>

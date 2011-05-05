@@ -21,54 +21,71 @@ $.ui.uicomponent.subclass("ui.grid", {
 	},
 
 	_createTableHeader : function(columns) {
-		var self = this;
-
 		tr = $('<tr></tr>');
-		var cid = 0;
-
-		for ( var index in columns) {
-			var columnDefinition = columns[index];
-			var th = $('<th></th>');
-
-			th.addClass('col' + cid + '');
-			th.addClass("header");
-			th.attr("data-field", columnDefinition.field);
-
-			if (columnDefinition.headerAttr != null) {
-				th.attr(columnDefinition.headerAttr);
-			}
-
-			if (columnDefinition.width != null) {
-				th.css("width", columnDefinition.width);
-			}
-
-			if (columnDefinition.sortable != false) {
-				th.bind("click", {
-					"sortField" : columnDefinition.field
-				}, $.proxy(self._sort, self));
-
-				var header = $("<table></table>").appendTo(th);
-				var headerTr = $("<tr></tr>").appendTo(header);
-				$("<th></th>").appendTo(headerTr).html(columnDefinition.label);
-				$("<th></th>").appendTo(headerTr).html(" ").addClass("sort-arrow");
-				header.addClass("sortable");
-
-				this._applyStyle(header, columnDefinition.headerStyle);
-
-			} else {
-				this._applyStyle(th, columnDefinition.headerStyle);
-				th.html(columnDefinition.label);
-			}
-
-			if (columnDefinition.visible == false) {
-				th.hide();
-			}
-
+		for ( var columnIndex in columns) {
+			var columnDefinition = columns[columnIndex];
+			var th = this._createHeaderCell(tr, columnIndex, columnDefinition);
 			th.appendTo(tr);
-			cid++;
 		}
-		;
 		tr.appendTo(this.tableHead);
+	},
+
+	_createHeaderCell: function (tr, columnIndex, columnDefinition) {
+		var th = $('<th></th>');
+
+		th.addClass('col' + columnIndex);
+		th.addClass("header");
+		th.attr("data-field", columnDefinition.field);
+		
+		var headerRenderer = null;
+		if (columnDefinition.headerRenderer != null) {
+			headerRenderer = columnDefinition.headerRenderer;
+		} else if(this.options.headerRenderer != null) {
+			headerRenderer = this.options.headerRenderer;
+		} 
+		
+		if (headerRenderer != null) {
+			var listData = {
+				owner : this,
+				data : null,
+				column : columnDefinition,
+				index : columnIndex,
+				th : th,
+				tr : tr
+			};
+
+			var passedObjects = {
+				listData : listData
+			};
+			
+			if (columnDefinition.itemRendererOptions != null) {
+				jQuery.extend(passedObjects, columnDefinition.headerOptions);
+			}
+			
+			th[headerRenderer](passedObjects);
+			
+		}	else {
+			th.html(columnDefinition.label);
+		}
+		
+		if (columnDefinition.headerAttr != null) {
+			th.attr(columnDefinition.headerAttr);
+		}
+
+		if (columnDefinition.headerStyle!= null) {
+			this._applyStyle(th, columnDefinition.headerStyle);
+		}
+
+		if (columnDefinition.width != null) {
+			th.css("width", columnDefinition.width);
+		}
+
+		if (columnDefinition.visible == false) {
+			th.hide();
+		}
+		
+		
+		return th;
 	},
 
 	_updateData : function() {
@@ -103,7 +120,7 @@ $.ui.uicomponent.subclass("ui.grid", {
 	_buildCell: function (tr, rowIndex, columnIndex, rowData, columnDefinition) {
 		var td = $('<td></td>');
 		
-		td.addClass('col' + columnIndex + '');
+		td.addClass('col' + columnIndex);
 		td.addClass("column");
 
 		td.attr("data-field", columnDefinition.field);
@@ -152,7 +169,7 @@ $.ui.uicomponent.subclass("ui.grid", {
 				jQuery.extend(passedObjects, columnDefinition.itemRendererOptions);
 			}
 
-			$(td)[columnDefinition.itemRenderer](passedObjects);
+			td[columnDefinition.itemRenderer](passedObjects);
 		} else {
 			td.html(label);
 		}

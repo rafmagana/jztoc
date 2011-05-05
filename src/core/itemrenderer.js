@@ -18,12 +18,8 @@ $.ui.uicomponent.subclass("ui.itemrenderer", {
 	_dispatchEvent : function(eventType, data)
 	{
 		var event = jQuery.Event(eventType);
-		if (data != null)
-		{
-			$.extend(event, data);
-		}
 		event.listData = this.options.listData;
-		$(this.options.listData.owner.element).trigger(event);
+		$(this.options.listData.owner.element).trigger(event, data);
 	},
 
 	// ------------------------------------------------------------------------------
